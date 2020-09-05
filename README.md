@@ -2,7 +2,7 @@
 
 ## 소개
 
-[text.ksjit.com](아무말 대잔치)에 이용된 GPT2+Flask Frontend의 소스입니다.
+[아무말 대잔치](https://text.ksjit.com)에 이용된 GPT2+Flask Frontend의 소스입니다.
 
 ## Generating text with GPT-2
 

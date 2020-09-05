@@ -8,7 +8,7 @@ const Button = ({ onClick }) => (
         onClick={onClick}
         variant="outlined"
         color="primary">
-        Generate
+        말 만들어내기
   </MaterialButton>
 )
 

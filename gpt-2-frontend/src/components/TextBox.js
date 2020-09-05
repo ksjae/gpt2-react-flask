@@ -4,7 +4,7 @@ import { TextField } from '@material-ui/core';
 const TextBox = ({ text, setText }) => (
     <TextField
         margin='normal'
-        label="Write something..."
+        label="인공지능이 여기 있는 말 뒤의 내용을 생성할 것입니다."
         variant="outlined"
         fullWidth
         multiline

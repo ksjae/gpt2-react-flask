@@ -1,12 +1,8 @@
-# How to generate text with OpenAI's GPT-2, React and Flask
+# 웹버전 아무말 대잔치
 
-## Introduction
+## 소개
 
-In this tutorial, we'll build a Flask & React app with GPT-2 capabilities. We'll go step by step, by tweaking the generator's _"interface"_, then we'll build the Flask server and finally the React frontend.
-
-By the end of this tutorial, here's what our app should look like:
-
-![GPT-2 Generator with React & Flask](./screenshot.png)
+[text.ksjit.com](아무말 대잔치)에 이용된 GPT2+Flask Frontend의 소스입니다.
 
 ## Generating text with GPT-2
 

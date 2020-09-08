@@ -2,3 +2,4 @@ server/__pycache__
 gpt-2-frontend/node_modules
 gpt2-flask/*
 .vscode/
+flask/*

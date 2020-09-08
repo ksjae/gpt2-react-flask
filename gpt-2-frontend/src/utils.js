@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-
-const ENDPOINT_URL = "http://hpc.ksjit.com:5000/generate";
+axios.defaults.timeout = 900000;
+const ENDPOINT_URL = "https://hpc.ksjit.com:18000/generate";
 
 const useAsyncEndpoint = fn => {
     const [res, setRes] = React.useState({ data: null, complete: false, pending: false, error: false });

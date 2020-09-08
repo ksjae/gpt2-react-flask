@@ -11,10 +11,10 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 
-from pytorch_transformers import GPT2Config
-from pytorch_transformers import GPT2LMHeadModel, GPT2Tokenizer
+from transformers import GPT2Config
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
-
+"""
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
@@ -22,37 +22,7 @@ logger = logging.getLogger(__name__)
 
 MAX_LENGTH = int(10000)  # Hardcoded max length to avoid infinite loop
 
-ALL_MODELS = sum((tuple(conf.pretrained_config_archive_map.keys()) for conf in (
-    GPT2Config, )), ())
-
-MODEL_CLASSES = {
-    'gpt2': (GPT2LMHeadModel, GPT2Tokenizer)
-}
-
-# Padding text to help Transformer-XL and XLNet with short prompts as proposed by Aman Rusia
-# in https://github.com/rusiaaman/XLNet-gen#methodology
-# and https://medium.com/@amanrusia/xlnet-speaks-comparison-to-gpt-2-ea1a4e9ba39e
-PADDING_TEXT = """ In 1991, the remains of Russian Tsar Nicholas II and his family
-(except for Alexei and Maria) are discovered.
-The voice of Nicholas's young son, Tsarevich Alexei Nikolaevich, narrates the
-remainder of the story. 1883 Western Siberia,
-a young Grigori Rasputin is asked by his father and a group of men to perform magic.
-Rasputin has a vision and denounces one of the men as a horse thief. Although his
-father initially slaps him for making such an accusation, Rasputin watches as the
-man is chased outside and beaten. Twenty years later, Rasputin sees a vision of
-the Virgin Mary, prompting him to become a priest. Rasputin quickly becomes famous,
-with people, even a bishop, begging for his blessing. <eod> </s> <eos>"""
-
-
 def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float('Inf')):
-    """ Filter a distribution of logits using top-k and/or nucleus (top-p) filtering
-        Args:
-            logits: logits distribution shape (vocabulary size)
-            top_k > 0: keep only top k tokens with highest probability (top-k filtering).
-            top_p > 0.0: keep the top tokens with cumulative probability >= top_p (nucleus filtering).
-                Nucleus filtering is described in Holtzman et al. (http://arxiv.org/abs/1904.09751)
-        From: https://gist.github.com/thomwolf/1a5a29f6962089e871b94cbd09daf317
-    """
     assert logits.dim() == 1  # batch size 1 for now - could be updated for more but the code would be less clear
     top_k = min(top_k, logits.size(-1))  # Safety check
     if top_k > 0:
@@ -125,10 +95,6 @@ def generate_text(
 ):
     while True:
         raw_text = prompt if prompt else input("Model prompt >>> ")
-        if model_type in ["transfo-xl", "xlnet"]:
-            # Models with memory likes to have a long prompt for short inputs.
-            raw_text = (
-                padding_text if padding_text else PADDING_TEXT) + raw_text
         context_tokens = tokenizer.encode(raw_text)
         out = sample_sequence(
             model=model,
@@ -157,8 +123,8 @@ if n_gpu > 0:
     torch.cuda.manual_seed_all(42)
 
 model_type = "gpt2"
-model_name_or_path = "/home/ksjae/transformers/kogpt2"
-model_class, tokenizer_class = MODEL_CLASSES[model_type]
+model_name_or_path = "/home/super/transformers/kogpt2"
+model_class, tokenizer_class = GPT2LMHeadModel, GPT2Tokenizer
 tokenizer = tokenizer_class.from_pretrained(model_name_or_path)
 model = model_class.from_pretrained(model_name_or_path)
 model.to(device)
@@ -171,7 +137,7 @@ elif 0 < model.config.max_position_embeddings < length:
     length = model.config.max_position_embeddings
 elif length < 0:
     length = MAX_LENGTH  # avoid infinite loop
-
+"""
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -200,4 +166,4 @@ def get_gen():
         return jsonify({'result': result})
 
 if __name__ == '__main__':
-   app.run()
+   app.run(host='0.0.0.0', port=5000, debug=False)
